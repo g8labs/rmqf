@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "rmqf"
+require "irb"
+
+Rmqf.configure do |c|
+  c.consumer_key = ENV['MQF_CONSUMER_KEY']
+  c.consumer_secret = ENV['MQF_CONSUMER_SECRET']
+  c.access_token = ENV['MQF_ACCESS_TOKEN']
+  c.access_secret = ENV['MQF_ACCESS_SECRET']
+end
+
+IRB.start
