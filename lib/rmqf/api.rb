@@ -131,7 +131,7 @@ module Rmqf
     #      }
     #    }
     #  }
-    def create_subscriber(subscription_id, msisdn,subscription_via)
+    def create_subscriber(subscription_id, msisdn, subscription_via)
       path = "/v1/subscriptions/#{subscription_id}/subscribers"
 
       request(:post, path, msisdn: msisdn, subscriptionVia: subscription_via)
