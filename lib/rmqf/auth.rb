@@ -3,7 +3,14 @@ module Rmqf
   module Auth
 
     def request(verb, uri, params = {})
-      JSON.parse(token.request(verb, uri, params).body)
+      response = token.request(verb, uri, params.to_json, { 'Content-Type' => 'application/json' })
+
+      case response
+      when Net::HTTPSuccess
+        JSON.parse response.body
+      else
+        raise Error, response
+      end
     end
 
     private
@@ -13,7 +20,7 @@ module Rmqf
     def setup_oauth(configuration, host)
       @consumer = OAuth::Consumer.new(@configuration.consumer_key, @configuration.consumer_secret,
                                       site: host)
-      @token = OAuth::AccessToken.new(@consumer, @configuration.access_token,
+      @token = OAuth::CustomToken.new(@consumer, @configuration.access_token,
                                       @configuration.access_secret)
     end
 

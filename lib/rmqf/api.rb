@@ -131,7 +131,7 @@ module Rmqf
     #      }
     #    }
     #  }
-    def create_subscriber(subscription_id, msisdn, subscription_via)
+    def create_subscriber(subscription_id, msisdn, subscription_via = nil)
       path = "/v1/subscriptions/#{subscription_id}/subscribers"
 
       request(:post, path, msisdn: msisdn, subscriptionVia: subscription_via)
@@ -212,6 +212,47 @@ module Rmqf
         msisdn: msisdn,
         body: body
       })
+    end
+
+    # Sends a message with the given content to all the subscribers of the given subscription
+    #
+    # @param [Type] subscription_id The subscription
+    # @param [Type] message The text of the SMS message
+    # @return [Type] A new subscription message
+    # @example
+    #   {
+    #     "id": 15,
+    #     "resource": "http:\/\/mqf.globalnetmobile.com\/v1\/subscriptions\/222\/publications\/15",
+    #     "status": 0,
+    #     "text": "Tome Pin y haga Pun",
+    #     "notificationUrl": "http:\/\/example.com\/notification",
+    #     "submitTime:": 1438898468,
+    #     "startTime": 1438899368,
+    #     "subscription": {
+    #       "id": 355,
+    #       "resource": "http:\/\/mqf.globalnetmobile.com\/v1\/subscriptions\/355",
+    #       "name": "Servicio de Ejemplo",
+    #       "keyword": "EJEMPLO",
+    #       "type": "content",
+    #       "periodicity": "w",
+    #       "status": 1,
+    #       "billingType": "mt",
+    #       "carrier": {
+    #         "id": 14
+    #       }
+    #     }
+    #   }
+    def create_publication(subscription_id, message, notification_url, start_time = nil)
+      path = "/v1/subscriptions/#{subscription_id}/publications"
+
+      params = {
+       text: message,
+       notificationUrl: notification_url
+      }
+
+      params.merge!(startTime: start_time) if start_time
+
+      request(:post, path, params)
     end
 
   end

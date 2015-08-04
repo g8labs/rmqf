@@ -2,6 +2,8 @@ require 'rmqf/version'
 require 'oauth'
 require 'json'
 
+require_relative 'oauth/custom_token'
+require_relative 'rmqf/error'
 require_relative 'rmqf/configuration'
 require_relative 'rmqf/auth'
 require_relative 'rmqf/api'
