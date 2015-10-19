@@ -1,0 +1,5 @@
+require_relative 'adapter/base'
+require_relative 'adapter/carrier'
+require_relative 'adapter/shortcode'
+require_relative 'adapter/subscriber'
+require_relative 'adapter/subscription'

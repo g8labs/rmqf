@@ -55,7 +55,7 @@ module Rmqf
     end
 
 
-    # Gets the subsctiption by the given id
+    # Gets the subscription by the given id
     #
     # @param [Integer] subscription_id The subscription id
     # @return [Hash] The subscription
