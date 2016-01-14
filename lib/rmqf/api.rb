@@ -216,9 +216,9 @@ module Rmqf
 
     # Sends a message with the given content to all the subscribers of the given subscription
     #
-    # @param [Type] subscription_id The subscription
-    # @param [Type] message The text of the SMS message
-    # @return [Type] A new subscription message
+    # @param [Integer] subscription_id The subscription
+    # @param [String] message The text of the SMS message
+    # @return [Hash] A new subscription message
     # @example
     #   {
     #     "id": 15,
@@ -253,6 +253,68 @@ module Rmqf
       params.merge!(startTime: start_time) if start_time
 
       request(:post, path, params)
+    end
+
+    # Sends a message with a pin for mobile phone verification.
+    #
+    # @param [String] msisdn The user phone number
+    # @param [String] message The text of the pin message
+    # @return [Hash] The new message sent
+    # @example
+    #
+    #  {
+    #     "msisdn":"59894000000",
+    #     "body":"Su PIN es %{auth_pin}. Ingreselo para validar su celular.",
+    #     "id":13170923,
+    #     "status":"OK",
+    #     "externalId":12524843
+    #  }
+    def send_pin(subscription_id, msisdn, message = 'Your pin is %{auth_pin}.')
+      path = "/v1/subscriptions/#{subscription_id}/sendpin"
+
+      request(:post, path, {
+        msisdn: msisdn,
+        body: message
+      })
+    end
+
+    # Subscribes a user with the given pin. For this operation to work, **send_pin** should be called
+    # before.
+    #
+    # @param [String] msisdn The user phone number
+    # @param [String] pin The user pin
+    # @return [Hash] The new subscriber
+    # @example
+    #  {
+    #    "id":179712,
+    #    "resource":"http:\/\/mqf.globalnetmobile.com\/v1\/subscribers\/179712",
+    #    "msisdn":"541100000000",
+    #    "active":true,
+    #    "subscriptionVia":"mqf:wap",
+    #    "weekday":0,
+    #    "subscribedAt":1433035939,
+    #    "unsubscribedAt":0,
+    #    "subscription":{
+    #      "id":177,
+    #      "resource":"http:\/\/mqf.globalnetmobile.com\/v1\/subscriptions\/177",
+    #      "name":"Club WazzUp",
+    #      "keyword":"JUEGOS",
+    #      "type":"content",
+    #      "periodicity":"w",
+    #      "status":1,
+    #      "billingType":"billing",
+    #      "carrier":{
+    #        "id":2
+    #      }
+    #    }
+    #  }
+    def auth_pin(subscription_id, msisdn, pin)
+      path = "/v1/subscriptions/#{subscription_id}/authpin"
+
+      request(:post, path, {
+        msisdn: msisdn,
+        pin: pin
+      })
     end
 
   end
